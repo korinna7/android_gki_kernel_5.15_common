@@ -13,8 +13,8 @@ on:
         required: false
         type: string
         default: ''
-      build_date:
-        description: 'Build date YYYYMMDD (empty = today)'
+      build_timestamp:
+        description: 'Build timestamp UTC format: "Sun Dec 01 08:10:00 UTC 2024" (empty = now)'
         required: false
         type: string
         default: ''
@@ -114,7 +114,7 @@ jobs:
         export BAZEL_FLAGS="--local_ram_resources=10240 --local_cpu_resources=4"
         export KSU_PINNED_COMMIT="${{ inputs.ksu_pinned_commit }}"
         export SUSFS_PINNED_COMMIT="${{ inputs.susfs_pinned_commit }}"
-        export BUILD_DATE="${{ inputs.build_date }}"
+        export BUILD_TIMESTAMP="${{ inputs.build_timestamp }}"
         export CUSTOM_VERSION="${{ inputs.custom_version }}"
         ./build_gki.sh --ksu --susfs
 
