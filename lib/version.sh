@@ -9,7 +9,7 @@ source "$MODULE_DIR/common.sh"
 
 # Customize kernel version
 customize_version() {
-    BUILD_DATE="${BUILD_DATE:-$(date +%Y%m%d)}"
+    BUILD_DATE=$(date +%Y%m%d)
     CUSTOM_VERSION="${CUSTOM_VERSION:--serein-android13-8-$BUILD_DATE}"
     
     log "Customizing Kernel Version to: $CUSTOM_VERSION"
