@@ -2,6 +2,17 @@ name: Build GKI Kernel
 
 on:
   workflow_dispatch:
+    inputs:
+      build_timestamp:
+        description: 'Build timestamp UTC format: "Sun Dec 01 08:10:00 UTC 2024" (empty = now)'
+        required: false
+        type: string
+        default: ''
+      custom_version:
+        description: 'Custom CONFIG_LOCALVERSION (empty = "-serein-android13-8-<date>")'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   build:
@@ -91,6 +102,8 @@ jobs:
         # 运行构建脚本，它会自动处理环境设置、配置修复、构建和打包
         # 设置 Bazel 资源限制以防止 OOM
         export BAZEL_FLAGS="--local_ram_resources=10240 --local_cpu_resources=4"
+        export BUILD_TIMESTAMP="${{ inputs.build_timestamp }}"
+        export CUSTOM_VERSION="${{ inputs.custom_version }}"
         ./build_gki.sh
 
     - name: Upload Kernel Artifacts
