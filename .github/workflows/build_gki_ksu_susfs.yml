@@ -1,8 +1,6 @@
 name: Build GKI with KernelSU + SUSFS
 
 on:
-  schedule:
-    - cron: '0 6 * * *'  # 6-hour offset from vanilla KSU build (cron: 0 0 * * *)
   workflow_dispatch:
     inputs:
       ksu_pinned_commit:
