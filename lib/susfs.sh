@@ -18,8 +18,8 @@ SUSFS_PRIMARY_URL="https://gitlab.com/simonpunk/susfs4ksu.git"
 SUSFS_FALLBACK_URL="https://github.com/ShirkNeko/susfs4ksu.git"
 # SUSFS branch for android13-5.15: gki-android13-5.15
 SUSFS_BRANCH="gki-android13-5.15"
-# Optional fixed commit (empty = latest branch tip)
-SUSFS_FIXED_COMMIT="${SUSFS_FIXED_COMMIT:-}"
+# Optional SUSFS commit pin (env var). Empty = use branch tip from clone.
+SUSFS_PINNED_COMMIT="${SUSFS_PINNED_COMMIT:-}"
 # Clone destination (sibling to source, not inside source)
 SUSFS_CLONE_DIR=""
 
@@ -54,11 +54,11 @@ clone_susfs_repo() {
     fi
 
     # Pin to fixed commit if specified
-    if [ -n "$SUSFS_FIXED_COMMIT" ]; then
-        log "Checking out fixed SUSFS commit: $SUSFS_FIXED_COMMIT"
-        git -C "$clone_dir" fetch --depth=50 origin "$SUSFS_FIXED_COMMIT" 2>/dev/null || true
-        git -C "$clone_dir" checkout "$SUSFS_FIXED_COMMIT" || {
-            error "Failed to checkout SUSFS commit: $SUSFS_FIXED_COMMIT"
+    if [ -n "$SUSFS_PINNED_COMMIT" ]; then
+        log "Checking out SUSFS: $SUSFS_PINNED_COMMIT"
+        git -C "$clone_dir" fetch --depth=50 origin "$SUSFS_PINNED_COMMIT" 2>/dev/null || true
+        git -C "$clone_dir" checkout "$SUSFS_PINNED_COMMIT" || {
+            error "Failed to checkout SUSFS commit: $SUSFS_PINNED_COMMIT"
             exit 1
         }
     fi
@@ -128,7 +128,7 @@ patch_kernelsu_for_susfs() {
     fi
 
     # Apply the patch (--forward: skip if already applied)
-    if patch -p1 --forward --no-backup-if-mismatch < 10_enable_susfs_for_ksu.patch 2>/dev/null; then
+    if patch -p1 --forward --no-backup-if-mismatch < 10_enable_susfs_for_ksu.patch; then
         log "✓ KernelSU SUSFS enablement patch applied successfully"
     else
         warn "KernelSU SUSFS enablement patch may have partially failed"
@@ -432,7 +432,7 @@ setup_susfs() {
     cd "$KERNEL_SRC"
     if [ -f "50_add_susfs_in_gki-android13-5.15.patch" ]; then
         log "Applying main SUSFS kernel patch..."
-        if patch -p1 --forward --no-backup-if-mismatch < 50_add_susfs_in_gki-android13-5.15.patch 2>/dev/null; then
+        if patch -p1 --forward --no-backup-if-mismatch < 50_add_susfs_in_gki-android13-5.15.patch; then
             log "✓ Main SUSFS patch applied successfully"
         else
             warn "Main SUSFS patch may have partially failed to apply"
