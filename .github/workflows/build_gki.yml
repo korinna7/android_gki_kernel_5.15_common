@@ -1,12 +1,6 @@
 name: Build GKI Kernel
 
 on:
-  push:
-    branches:
-      - copilot/create-workflow-script-for-kernel
-  pull_request:
-    branches:
-      - copilot/create-workflow-script-for-kernel
   workflow_dispatch:
 
 jobs:
