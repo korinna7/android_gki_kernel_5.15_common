@@ -1,7 +1,10 @@
 # Android GKI 通用内核镜像
 
 ## 项目简介
+### Changelog
+Added compilation support for the susfs library. To compile, you only need to input the matching susfs4ksu and KSU commit hashes in the workflow (Please refer to Bump version info in simonpunk/susfs4ksu/Commits). Thanks to serein-213, hfdem, and ztc1997.
 
+### 原项目简介
 本项目是基于 **Linux 5.15.194** 的 **Android GKI (Generic Kernel Image)** 通用内核镜像源码。GKI 是 Google 为 Android 设备设计的统一内核架构，旨在实现内核与硬件驱动分离，提高内核的可维护性和兼容性。
 
 ### 内核版本信息
