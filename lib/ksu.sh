@@ -29,14 +29,15 @@ setup_kernelsu() {
     log "Running official KernelSU setup script..."
     curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s
     
-    # Switch to latest main branch instead of tag
+    # Switch to target commit (env-var pin or latest main)
     if [ -d "KernelSU" ]; then
-        log "Switching KernelSU to latest main branch..."
+        KSU_TARGET="${KSU_PINNED_COMMIT:-origin/main}"
+        log "Checking out KSU: $KSU_TARGET"
         cd KernelSU
-        git fetch origin main
-        git checkout origin/main
+        git fetch origin "$KSU_TARGET" 2>/dev/null || true
+        git checkout "$KSU_TARGET"
         CURRENT_COMMIT=$(git rev-parse --short HEAD)
-        log "✓ KernelSU now at main branch: $CURRENT_COMMIT"
+        log "✓ KernelSU now at: $CURRENT_COMMIT"
         cd ..
     fi
     
