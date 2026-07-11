@@ -43,7 +43,10 @@ setup_kernelsu() {
     # Verify installation
     if [ -d "KernelSU" ] && [ -d "KernelSU/kernel" ]; then
         log "KernelSU directory found."
-        
+
+        # Expose KSU commit for SUSFS compatibility tracking
+        export KSU_COMMIT="$CURRENT_COMMIT"
+
         # Fix: Hardcode KernelSU version for Bazel build
         # Bazel runs in a sandbox and cannot access .git directory to determine version
         cd KernelSU
