@@ -1,6 +1,8 @@
 name: Build GKI with KernelSU + SUSFS
 
 on:
+  schedule:
+    - cron: '0 6 * * *'  # 6-hour offset from vanilla KSU build (cron: 0 0 * * *)
   workflow_dispatch:
     inputs:
       ksu_pinned_commit:
@@ -10,6 +12,16 @@ on:
         default: ''
       susfs_pinned_commit:
         description: 'SUSFS commit (empty = branch tip)'
+        required: false
+        type: string
+        default: ''
+      build_date:
+        description: 'Build date YYYYMMDD (empty = today)'
+        required: false
+        type: string
+        default: ''
+      custom_version:
+        description: 'Custom CONFIG_LOCALVERSION (empty = "-serein-android13-8-<date>")'
         required: false
         type: string
         default: ''
@@ -104,6 +116,8 @@ jobs:
         export BAZEL_FLAGS="--local_ram_resources=10240 --local_cpu_resources=4"
         export KSU_PINNED_COMMIT="${{ inputs.ksu_pinned_commit }}"
         export SUSFS_PINNED_COMMIT="${{ inputs.susfs_pinned_commit }}"
+        export BUILD_DATE="${{ inputs.build_date }}"
+        export CUSTOM_VERSION="${{ inputs.custom_version }}"
         ./build_gki.sh --ksu --susfs
 
     - name: Upload Kernel Artifacts
